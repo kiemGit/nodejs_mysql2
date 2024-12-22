@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:5.7
+    container_name: mysql1
+    environment:
+      MYSQL_ROOT_PASSWORD: sap123ok
+      MYSQL_DATABASE: test
+      MYSQL_USER: hakim
+      MYSQL_PASSWORD: sap123ok
+    ports:
+      - "3306:3306"
+    networks:
+      - app-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: express_app
+    environment:
+      DB_HOST: db
+      DB_USER: hakim
+      DB_PASSWORD: sap123ok
+      DB_NAME: test
+    ports:
+      - "3210:3210"
+    networks:
+      - app-network
+    depends_on:
+      - db
+
+networks:
+  app-network:
+    driver: bridge
